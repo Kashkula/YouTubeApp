@@ -9,11 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.FragmentManager
 import com.youtubeapp.R
 import com.youtubeapp.databinding.FragmentUnNetworkBinding
-import com.youtubeapp.ui.main.MainFragment
+import com.youtubeapp.ui.activity.main.MainFragment
 
 @Suppress("DEPRECATION")
 class UnNetworkFragment : Fragment() {

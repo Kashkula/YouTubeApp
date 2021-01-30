@@ -1,25 +1,23 @@
-package com.youtubeapp.ui.main
+package com.youtubeapp.ui.activity.main
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.youtubeapp.databinding.MainFragmentBinding
+import com.youtubeapp.network.Status
+import com.youtubeapp.ui.activity.video.VideoListActivity
 import com.youtubeapp.ui.playlists.PlaylistItem
 
 
 @Suppress("DEPRECATION")
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), ItemAdapter.Listener {
 
     private lateinit var adapter: ItemAdapter
     private lateinit var list: MutableList<PlaylistItem>
@@ -40,26 +38,36 @@ class MainFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
         vm = ViewModelProvider(this).get(MainViewModel::class.java)
 
-
         init()
-
-
-
         fetchData()
-
 
     }
 
     private fun fetchData() {
         vm.fetchPlaylistsFromServer().observe(requireActivity(), Observer {
-            adapter.addList(it!!.items)
-            Log.d("TAG", "fetchData: " + it.items!![0].snippet?.thumbnails?.medium?.url)
+            when (it.status) {
+                Status.SUCCESS -> {
+                    adapter.addList(it.data?.items)
+                    Toast.makeText(requireContext(), it.message ?: "SUCCESS", Toast.LENGTH_SHORT)
+                }
+                Status.ERROR -> Toast.makeText(
+                    requireContext(),
+                    it.message ?: "ERROR",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         })
     }
 
     private fun init() {
         list = mutableListOf()
-        adapter = ItemAdapter(list)
+        adapter = ItemAdapter( this)
         binding.rv.adapter = adapter
+    }
+
+    override fun onItemClicked(item: PlaylistItem) {
+        val intent = Intent(requireContext(), VideoListActivity::class.java)
+        intent.putExtra("KEY", item)
+        startActivity(intent)
     }
 }

@@ -1,21 +1,22 @@
-package com.youtubeapp.ui.main
+package com.youtubeapp.ui.activity.main
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.youtubeapp.databinding.ListItemBinding
+import com.youtubeapp.databinding.ListItemPlaylistsBinding
 import com.youtubeapp.ui.playlists.PlaylistItem
 
-class ItemAdapter(private var list: MutableList<PlaylistItem>) :
+class ItemAdapter( private val listener: Listener) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
-    private lateinit var binding: ListItemBinding
 
+    private lateinit var binding: ListItemPlaylistsBinding
+    private var list = ArrayList<PlaylistItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = ListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ListItemPlaylistsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
@@ -24,13 +25,19 @@ class ItemAdapter(private var list: MutableList<PlaylistItem>) :
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val model = list[position]
 
-        Glide.with(holder.itemView).load(model.snippet?.thumbnails?.medium?.url.toString())
-            .into(binding.iv)
+        holder.itemView.apply {
+            Glide.with(this).load(model.snippet?.thumbnails?.medium?.url.toString())
+                .into(binding.iv)
 
-        binding.tvTitle.text = model.snippet?.title
+            this.setOnClickListener {
+                listener.onItemClicked(list[position])
+            }
+            binding.tvTitle.text = model.snippet?.title
+        }
     }
 
     fun addList(list: MutableList<PlaylistItem>?) {
+
         this.list.let {
             it.clear()
             list?.let { it1 -> it.addAll(it1) }
@@ -39,6 +46,10 @@ class ItemAdapter(private var list: MutableList<PlaylistItem>) :
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+
+    interface Listener {
+        fun onItemClicked(item: PlaylistItem)
+    }
 
 
 }

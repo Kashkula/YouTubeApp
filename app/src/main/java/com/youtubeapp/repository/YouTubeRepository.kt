@@ -1,11 +1,9 @@
 package com.youtubeapp.repository
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.liveData
+import com.youtubeapp.network.Resource
 import com.youtubeapp.network.RetrofitClient
-import com.youtubeapp.ui.playlists.PlaylistInfo
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.coroutines.Dispatchers
 
 class YouTubeRepository {
 
@@ -16,19 +14,47 @@ class YouTubeRepository {
 
     private val api = RetrofitClient().instanceRetrofit()
 
-    fun fetchPlaylistsFromServer(): MutableLiveData<PlaylistInfo?> {
-        val data = MutableLiveData<PlaylistInfo?>()
-        api.fetchPlaylists(part, channelId, key).enqueue(object : Callback<PlaylistInfo?> {
-            override fun onFailure(call: Call<PlaylistInfo?>, t: Throwable) {
-//                data = null
-            }
-
-            override fun onResponse(call: Call<PlaylistInfo?>, response: Response<PlaylistInfo?>) {
-                data.value = response.body()
-            }
-        })
-        return data
+    fun fetchPlaylists() = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(Resource.success(data = api.fetchPlaylists(part, channelId, key)))
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message.toString()))
+        }
     }
+
+    fun fetchVideoListById(id: String) = liveData(Dispatchers.IO) {
+        emit(Resource.loading(data = null))
+        try {
+            emit(
+                Resource.success(
+                    data = api.fetchDetailPlaylistById(
+                        part,
+                        pageToken = null,
+                        playlistId = id,
+                        key = key
+                    )
+                )
+            )
+        } catch (ex: Exception) {
+            emit(Resource.error(data = null, message = ex.message.toString()))
+        }
+
+    }
+
+
+//    fun fetchPlaylistsFromServer(): MutableLiveData<PlaylistInfo?> {
+//        val data = MutableLiveData<PlaylistInfo?>()
+//        api.fetchPlaylists(part, channelId, key).enqueue(object : Callback<PlaylistInfo?> {
+//            override fun onFailure(call: Call<PlaylistInfo?>, t: Throwable) {
+//               data = null
+//            }
+//            override fun onResponse(call: Call<PlaylistInfo?>, response: Response<PlaylistInfo?>) {
+//                data.value = response.body()
+//            }
+//        })
+//        return data
+//    }
 
 
 }
