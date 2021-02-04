@@ -1,7 +1,10 @@
-package com.youtubeapp.ui.playlists
+package com.youtubeapp.ui.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import java.io.Serializable
 
+@Entity(tableName = "playListInfo")
 data class PlaylistInfo(
     var nextPageToken: String? = null,
     var items: MutableList<PlaylistItem>? = null

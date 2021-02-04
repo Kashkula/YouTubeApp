@@ -3,6 +3,8 @@ plugins {
     id 'kotlin-android'
 }
 
+apply plugin: 'kotlin-kapt'
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -73,5 +75,10 @@ dependencies {
     //design
     //noinspection GradleCompatible
     implementation 'com.android.support:design:27.1.1'
+
+    // Room components
+    implementation "androidx.room:room-ktx:2.2.6"
+    kapt "androidx.room:room-compiler:2.2.6"
+    androidTestImplementation "androidx.room:room-testing:2.2.6"
 
 }

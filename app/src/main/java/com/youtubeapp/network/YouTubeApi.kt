@@ -1,7 +1,6 @@
 package com.youtubeapp.network
 
-import com.youtubeapp.ui.playlists.PlaylistInfo
-import retrofit2.Call
+import com.youtubeapp.ui.model.PlaylistInfo
 import retrofit2.http.GET
 import retrofit2.http.Query
 

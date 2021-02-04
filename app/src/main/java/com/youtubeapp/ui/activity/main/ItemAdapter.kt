@@ -6,9 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.youtubeapp.databinding.ListItemPlaylistsBinding
-import com.youtubeapp.ui.playlists.PlaylistItem
+import com.youtubeapp.ui.model.PlaylistItem
 
-class ItemAdapter( private val listener: Listener) :
+class ItemAdapter(private val listener: Listener) :
     RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
 
 
@@ -16,7 +16,8 @@ class ItemAdapter( private val listener: Listener) :
     private var list = ArrayList<PlaylistItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        binding = ListItemPlaylistsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding =
+            ListItemPlaylistsBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding.root)
     }
 
@@ -37,7 +38,6 @@ class ItemAdapter( private val listener: Listener) :
     }
 
     fun addList(list: MutableList<PlaylistItem>?) {
-
         this.list.let {
             it.clear()
             list?.let { it1 -> it.addAll(it1) }

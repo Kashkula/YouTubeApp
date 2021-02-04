@@ -13,7 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.youtubeapp.databinding.MainFragmentBinding
 import com.youtubeapp.network.Status
 import com.youtubeapp.ui.activity.video.VideoListActivity
-import com.youtubeapp.ui.playlists.PlaylistItem
+import com.youtubeapp.ui.model.PlaylistItem
 
 
 @Suppress("DEPRECATION")
@@ -43,12 +43,12 @@ class MainFragment : Fragment(), ItemAdapter.Listener {
 
     }
 
+
     private fun fetchData() {
         vm.fetchPlaylistsFromServer().observe(requireActivity(), Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     adapter.addList(it.data?.items)
-                    Toast.makeText(requireContext(), it.message ?: "SUCCESS", Toast.LENGTH_SHORT)
                 }
                 Status.ERROR -> Toast.makeText(
                     requireContext(),
@@ -61,7 +61,7 @@ class MainFragment : Fragment(), ItemAdapter.Listener {
 
     private fun init() {
         list = mutableListOf()
-        adapter = ItemAdapter( this)
+        adapter = ItemAdapter(this)
         binding.rv.adapter = adapter
     }
 

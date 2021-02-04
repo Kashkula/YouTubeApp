@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.youtubeapp.network.Resource
 import com.youtubeapp.repository.YouTubeRepository
-import com.youtubeapp.ui.playlists.PlaylistInfo
+import com.youtubeapp.ui.model.PlaylistInfo
 
 class VideoListViewModel : ViewModel() {
 

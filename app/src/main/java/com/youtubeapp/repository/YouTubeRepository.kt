@@ -1,11 +1,13 @@
 package com.youtubeapp.repository
 
 import androidx.lifecycle.liveData
+import com.youtubeapp.data.PlaylistInfoDao
 import com.youtubeapp.network.Resource
 import com.youtubeapp.network.RetrofitClient
+import com.youtubeapp.ui.model.PlaylistInfo
 import kotlinx.coroutines.Dispatchers
 
-class YouTubeRepository {
+class YouTubeRepository(private val playlistInfoDao: PlaylistInfoDao) {
 
 
     val key = "AIzaSyDNWAAfVD8nd6X--WF7aI2q7di8MrOquNM"
@@ -13,6 +15,10 @@ class YouTubeRepository {
     val part = "snippet,contentDetails"
 
     private val api = RetrofitClient().instanceRetrofit()
+
+    suspend fun addPlaylistInfo(model: MutableList<PlaylistInfo>) {
+        playlistInfoDao.addPlaylistInfo(model)
+    }
 
     fun fetchPlaylists() = liveData(Dispatchers.IO) {
         emit(Resource.loading(data = null))
